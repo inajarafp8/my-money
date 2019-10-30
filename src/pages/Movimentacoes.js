@@ -4,11 +4,12 @@ import Rest from '../utils/rest';
 
 
 const baseURL = 'https://mymoney-devplen.firebaseio.com/';
-const {useGet, usePost, useDelete, } = Rest(baseURL);
+const {useGet, usePost, useDelete, usePatch } = Rest(baseURL);
 
 const Movimentacoes = ({match}) => {
     const data = useGet(`movimentacoes/${match.params.data}`);
     const dataMeses = useGet(`meses/${match.params.data}`);
+    const [dataPatch, patch] = usePatch();
     const [postData, salvar] = usePost(`movimentacoes/${match.params.data}`)
     const [removeData, remover] = useDelete('')
     //controlede for
@@ -42,16 +43,21 @@ const Movimentacoes = ({match}) => {
         dataMeses.refetch()
     }
     
+    const alterarPrevisaoEntrada = (evt) => {
+        patch(`meses/${match.params.data}`, {previsao_entrada: evt.target.value})
+    }
+    const alterarPrevisaoSaida= (evt) => {
+        patch(`meses/${match.params.data}`, {previsao_saida: evt.target.value})
+    }
 
     return (
         <div className='container'>
             <h1>Movimentações</h1>
             {
-                !dataMeses.loading && <div>
-                    Previsão de entrada: {dataMeses.data.previsao_entrada} / Previsão de saída: {dataMeses.data.previsao_saida} 
+                !dataMeses.loading &&  dataMeses.data && <div >
+                     Previsão de entrada: {dataMeses.data.previsao_entrada} <input placeholder='previsão de Entrada' className='form-control col-sm-2' type='text' onBlur={alterarPrevisaoEntrada} />  Previsão de saída: {dataMeses.data.previsao_saida} <input placeholder='Previsão de Saída' className='form-control col-sm-2' type='text' onBlur={alterarPrevisaoSaida} />
                      <br />
                     Entradas: {dataMeses.data.entradas} / Saídas: {dataMeses.data.saidas}
-                    
                 </div>
             }
             <table className ='table'>
@@ -77,11 +83,11 @@ const Movimentacoes = ({match}) => {
                             )
                         })
                     }
-                    <tr>
-                        <td><input type='text' value={descricao} onChange={onChangeDescricao}/></td>
-                        <td>
-                            <input type='text' value={valor} onChange={onChangeValor}/>
-                            <button className='btn btn-success' onClick={salvarMovimentacao}>+</button>
+                    <tr >
+                        <td ><input placeholder='Descrição' className=' form-control col-sm-3 ' type='text' value={descricao} onChange={onChangeDescricao}/></td>
+                        <td className='form-inline'>
+                            <input placeholder='Valor' className='form-control  col-sm-3 mr-sm-0' type='text' value={valor} onChange={onChangeValor}/>
+                            <button className='btn btn-success  col-sm-1' onClick={salvarMovimentacao}>+</button>
                         </td>
                     </tr>
 

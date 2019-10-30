@@ -37,13 +37,13 @@ const AdicionarMes = () => {
         <React.Fragment>
             <h2>Adicionar Mês</h2>
             
-            <select ref = {refAno}>
+            <select className='custom-select col-1 mb-1 mr-sm-1 mb-sm-0' ref = {refAno}>
                 {anos.map(ano => <option key={ano} value={ano}>{ano}</option> )}
             </select>
-            <select ref = {refMes}>
+            <select className='custom-select col-1 mb-1 mr-sm-1 mb-sm-0' ref = {refMes}>
                 {meses.map(zeroPad).map(mes => <option key={mes} value={mes}>{mes}</option> )}
             </select>
-            <button onClick= {verMes}>Adicionar mês</button>
+            <button className='btn btn-primary' onClick= {verMes}>Adicionar mês</button>
        </React.Fragment>
     )
 }
